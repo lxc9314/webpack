@@ -23,7 +23,6 @@ module.exports = {
         "@babel/polyfill",
         "./src/index"
       ].filter(item => !!item),
-      "./src/styles/index.scss"
     ]
   },
   stats: {
@@ -37,6 +36,7 @@ module.exports = {
     publicPath: "/"
   },
   plugins: [
+    // css 提取
     new MiniCssExtractPlugin({
       filename: "[name].[contenthash].css",
       allChunks: true
@@ -63,11 +63,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.css$/,
-        use: ["style-loader", "css-loader"]
-      },
-      {
-        test: /\.scss$/,
+        test: /\.(sc|sa|c)ss$/,
         use: [
           isDev()
             ? { loader: "style-loader", options: { sourceMap: true } }
@@ -78,6 +74,22 @@ module.exports = {
               modules: true,
               sourceMap: isDev(),
               localIdentName: "[local]-[hash:base64:10]"
+            }
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              ident: 'postcss',
+              plugins: (loader) => [
+                require('autoprefixer')({
+                  browsers: [
+                    'last 10 Chrome versions',
+                    'last 5 Firefox versions',
+                    'Safari >= 6',
+                    'ie > 8'
+                  ]
+                })
+              ]
             }
           },
           {
