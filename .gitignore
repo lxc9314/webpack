@@ -1,0 +1,8 @@
+# devDependencies
+node_moudles
+# log
+yarn-error.log
+# production
+dist
+build
+.idea
